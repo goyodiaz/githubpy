@@ -45,6 +45,7 @@ ApiNotFoundError: https://api.github.com/users/github-not-exist-user/followers
 
 # Modified by Goyo:
 # - Removed unused imports.
+# - Add export_to_gis()
 
 
 import base64, urllib, urllib2
@@ -278,6 +279,20 @@ class JsonObject(dict):
 
     def __setstate__(self, state):
         self.update(state)
+
+
+def export_to_gist(fname, username=None, password=None, gistid=None,
+        public=True, **kwargs):
+    gh = GitHub(username=username, password=password)
+    with open(fname) as f:
+        content = f.read()
+    files={fname: {'content': content}}
+    if gistid is None:
+        ret = gh.gists.post(public=public, files=files, **kwargs)
+    else:
+        ret = gh.gists(gistid).post(files=files, **kwargs)
+    return ret
+
 
 if __name__ == '__main__':
     import doctest
