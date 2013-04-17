@@ -43,16 +43,16 @@ Traceback (most recent call last):
 ApiNotFoundError: https://api.github.com/users/github-not-exist-user/followers
 '''
 
-import re, os, sha, time, hmac, base64, hashlib, urllib, urllib2, mimetypes
+# Modified by Goyo:
+# - Removed unused imports.
+
+
+import base64, urllib, urllib2
 
 try:
     import json
 except ImportError:
     import simplejson as json
-
-from collections import Iterable
-from datetime import datetime, timedelta, tzinfo
-from StringIO import StringIO
 
 _URL = 'https://api.github.com'
 _METHOD_MAP = dict(
@@ -106,7 +106,7 @@ class GitHub(object):
         '''
         In callback url: http://host/callback?code=123&state=xyz
 
-        use code and state to get an access token.        
+        use code and state to get an access token.
         '''
         kw = dict(client_id=self._client_id, client_secret=self._client_secret, code=code)
         if self._redirect_uri:
